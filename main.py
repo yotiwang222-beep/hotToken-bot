@@ -20,15 +20,15 @@ def monitor():
         try:
             r = requests.get("https://api.dexscreener.com/latest/dex/pairs/solana,base,bsc,ethereum")
             for p in r.json().get("pairs", []):
-                vol = p.get("volume", {}).get("h24", 0)
-                change = p.get("priceChange", {}).get("h24", 0)
-                if vol > 500000 and change > 30:
+                vol = p.get("volume", {}).get("h1", 0)
+                change = p.get("priceChange", {}).get("h1", 0)
+                if vol > 1000000 and change > 30:
                     symbol = p["baseToken"]["symbol"]
                     link = f"https://dexscreener.com/{p['chainId']}/{p['pairAddress']}"
                     msg = f"Up *{symbol}* | +{change:.1f}% | ${vol:,.0f}\n<a href='{link}'>Chart</a>"
                     send(msg)
         except: pass
-        time.sleep(60)
+        time.sleep(30)
 
 # 启动监控线程
 threading.Thread(target=monitor, daemon=True).start()
@@ -40,6 +40,7 @@ def home():
 if __name__ == "__main__":
 
     app.run(host='0.0.0.0', port=8080)
+
 
 
 
