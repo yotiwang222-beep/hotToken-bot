@@ -15,6 +15,7 @@ def send(msg):
     except: pass
 
 def monitor():
+    send("🚀 Bot 测试成功！正在监控热点代币...")
     while True:
         try:
             r = requests.get("https://api.dexscreener.com/latest/dex/pairs/solana,base,sui")
@@ -39,3 +40,4 @@ def home():
 if __name__ == "__main__":
 
     app.run(host='0.0.0.0', port=8080)
+
