@@ -18,7 +18,7 @@ def send(msg):
 def monitor():
     while True:
         try:
-            r = requests.get("https://api.dexscreener.com/latest/dex/pairs/solana,base,sui")
+            r = requests.get("https://api.dexscreener.com/latest/dex/pairs/solana,base,bsc,ethereum")
             for p in r.json().get("pairs", []):
                 vol = p.get("volume", {}).get("h24", 0)
                 change = p.get("priceChange", {}).get("h24", 0)
@@ -40,6 +40,7 @@ def home():
 if __name__ == "__main__":
 
     app.run(host='0.0.0.0', port=8080)
+
 
 
 
