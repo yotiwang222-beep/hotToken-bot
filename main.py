@@ -5,8 +5,9 @@ import threading
 
 app = Flask(__name__)
 
-BOT_TOKEN = "8155888633:AAECW2-c4gUTwMF5gWCi-KVxQTgzi1s6DBM"
-CHANNEL_ID = "-1003224080782"
+import os  # ← 必须加！
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHANNEL_ID = os.getenv("CHANNEL_ID")
 
 def send(msg):
     try:
@@ -40,4 +41,5 @@ def home():
 if __name__ == "__main__":
 
     app.run(host='0.0.0.0', port=8080)
+
 
