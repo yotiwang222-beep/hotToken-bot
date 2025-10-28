@@ -1,5 +1,5 @@
 import requests
-import time
+import time          # ← 必须在最上面！
 import os
 from flask import Flask
 import threading
@@ -9,7 +9,7 @@ app = Flask(__name__)
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHANNEL_ID = os.getenv("CHANNEL_ID")
 
-# 先定义 send 函数
+# 先定义 send
 def send(msg):
     try:
         requests.post(
@@ -20,12 +20,12 @@ def send(msg):
     except Exception as e:
         print("发送失败:", e)
 
-# 再定义 monitor 函数
+# 再定义 monitor
 def monitor():
-    send("Bot 重启成功！正在监控 5 链...")
+    send("Bot 强制重启！正在监控 5 链...")
     while True:
         try:
-            time.sleep(35)  # 防限流
+            time.sleep(35)
             headers = {"User-Agent": "HotTokenBot/1.0"}
             r = requests.get(
                 "https://api.dexscreener.com/latest/dex/pairs/solana,base,sui,bsc,ethereum",
@@ -36,10 +36,8 @@ def monitor():
                 print("API 限流，等待 60 秒...")
                 time.sleep(60)
                 continue
-                
             data = r.json().get("pairs", [])
-            print(f"扫描到 {len(data)} 个交易对")  # 日志滚动
-            
+            print(f"扫描到 {len(data)} 个交易对")
             for p in data:
                 vol = p.get("volume", {}).get("h1", 0)
                 change = p.get("priceChange", {}).get("h1", 0)
@@ -49,12 +47,10 @@ def monitor():
                     msg = f"1h *{symbol}* | +{change:.1f}% | ${vol:,.0f}\n<a href='{link}'>Chart</a>"
                     send(msg)
                     print("推送:", symbol)
-                    
         except Exception as e:
             print("监控错误:", e)
             time.sleep(30)
 
-# 启动线程
 threading.Thread(target=monitor, daemon=True).start()
 
 @app.route('/')
